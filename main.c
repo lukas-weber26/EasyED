@@ -357,7 +357,70 @@ int numbers(int start, int end) {
 int replace() {}; 
 
 int delete(int start, int end) {
+
+	text_line * current = first_line;
+	while (current -> next_line) {
+		current = current -> next_line;
+	}
+
+	int delete_first = start;
+	int delete_last = (current ->line_number <= end) ? 1 : 0;
+
+	if (delete_first == 1 && delete_last == 1) {
+		current = first_line;
+		text_line * deleteable;
 	
+		while (current) {
+			deleteable= current;
+			current = current ->next_line;
+			free(deleteable->text);
+			free(deleteable);
+		}
+
+		first_line= new_blank_line();
+		current_line = new_blank_line();
+
+	} else if (delete_first == 1) {
+		current = first_line;
+		text_line * deleteable;
+	
+		while (current && current -> line_number <= end) {
+			deleteable= current;
+			current = current ->next_line;
+			free(deleteable->text);
+			free(deleteable);
+		}
+
+		first_line= current;
+		current_line = current;  
+
+	} else {
+		current= first_line;
+		text_line * delete_from;
+		while (current -> next_line) {
+			if (current -> next_line -> line_number == start) {
+				delete_from = current;
+				break;
+			}
+			current= current -> next_line;
+		}
+
+		while (delete_from->next_line -> line_number <= end) {
+			if (delete_from ->next_line -> next_line) {
+				text_line * remove = delete_from -> next_line;
+				delete_from -> next_line = remove -> next_line;	
+				free(remove -> text);
+				free(remove);
+			} else {
+				delete_from -> next_line= NULL;	
+				break;
+			}
+		}
+	}
+
+	fix_line_numbers();
+	return 1;
+
 };
 
 //ok maybe this one is okay lmao
