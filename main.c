@@ -15,7 +15,7 @@ typedef struct text_line{
 
 int write();
 int delete(int start, int end);
-int replace();
+int replace(int start);
 int append(int line);
 int prepend(int line);
 int replace_words();
@@ -121,6 +121,7 @@ int main(int argc, char * argv[]) {
 		input_len = getline(&input_buffer, &input_buff_len, stdin);
 		if (input_len > 512) {
 			printf("Error. Input buffer overflow. Line discarded.\n");
+			exit(0);
 		} else {
 			mode = run_input(mode, input_buffer, input_len+1);
 		}
@@ -264,12 +265,12 @@ int run_comand(char * input_buffer, int input_count, int * mode) {
 			write();
 			break;
 		case('d'):
-			printf("Delete:%s:%s.\n",start_count,comand);
 			delete(starting_line, ending_line);
+			*mode = COMMAND;
 			break;
 		case('r'):
-			printf("Replace line:%s:%s.\n",start_count,comand);
-			replace();
+			replace(starting_line);
+			*mode = EDIT;
 			break;
 		case('a'):
 			//printf("Append:%s:%s.\n",start_count,comand);
@@ -354,7 +355,24 @@ int numbers(int start, int end) {
 };
 
 //replace is the same thing as delete but with slightly more steps.
-int replace() {}; 
+int replace(int start) {
+	text_line * current = first_line;
+	while (current)	{
+		if (current -> line_number == start) {
+			break;		
+		}
+		current= current->next_line;
+	}
+
+	free(current ->text);
+	current ->text = malloc(2*sizeof(char));
+	current->text[0] = '\n';
+	current->text[1] = '\0';
+	current->line_length = 1;
+	current_line = current; 
+
+	return 1;
+}; 
 
 int delete(int start, int end) {
 
