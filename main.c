@@ -265,7 +265,7 @@ int run_comand(char * input_buffer, int input_count, int * mode) {
 			break;
 		case('d'):
 			printf("Delete:%s:%s.\n",start_count,comand);
-			delete();
+			delete(starting_line, ending_line);
 			break;
 		case('r'):
 			printf("Replace line:%s:%s.\n",start_count,comand);
@@ -289,11 +289,9 @@ int run_comand(char * input_buffer, int input_count, int * mode) {
 			search();
 			break;
 		case('p'):
-			//printf("Print:%s:%s.\n",start_count,comand);
 			print(starting_line,ending_line);
 			break;
 		case('m'):
-			printf("Move:%s:%s.\n",start_count,comand);
 			move(starting_line, ending_line);
 			break;
 		case('c'):
@@ -357,7 +355,10 @@ int numbers(int start, int end) {
 
 //replace is the same thing as delete but with slightly more steps.
 int replace() {}; 
-int delete(int start, int end) {};
+
+int delete(int start, int end) {
+	
+};
 
 //ok maybe this one is okay lmao
 int move(int start, int end) {
@@ -390,9 +391,35 @@ int move(int start, int end) {
 		current_line = new;
 	}
 
-	//same as copy except we need to cull the source node -- WAIT, THIS IS ALSO A HUGE HASSLE!		
-
+	text_line * to_delete;
 	copy_to_node(source, current_line);
+
+	if (source ->line_number == first_line -> line_number) {
+		//in caase source node is the first node 
+		to_delete = first_line -> next_line;
+		move_lines(first_line->next_line, first_line);
+		
+			
+	} else { 
+		//in case the source node is not the first node 
+		current = first_line;
+		while (current -> next_line) {
+			if (current -> next_line == source) {
+				break;
+			}
+			current = current ->next_line;
+		}
+		to_delete = current -> next_line;
+		if (to_delete -> next_line) {
+			current -> next_line= to_delete -> next_line; 
+		} else {
+			current -> next_line = NULL;
+		}
+	}
+
+	free(to_delete ->text);
+	free(to_delete);
+
 	fix_line_numbers();
 	return 1;
 };
