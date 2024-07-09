@@ -1,15 +1,16 @@
-To do
-
+Thinngs to consider when making ed:
+-q to quit 
 -w to write (make sure to have an output message)
+-make ed filename open a file. Add a prompt by default
 -a should add a line and go in insert 
 -enter period (ends a comand), puts your ass back in propmpt mode after editing 
 -in ed ,p prints out the doc. maybe just make this p
 -actually it does 1,$p meaning print from one to last
 -n does a print with line numbers, works like p
 -n with nothing else prints out your current line number 
--+1p should print one above the current 
--4c changes line 4. 
--I guess d works like c except just deletes the line (carefull, this has to refigure out all the lines)
+- +1p should print one above the current 
+- 4c changes line 4. 
+- I guess d works like c except just deletes the line (carefull, this has to refigure out all the lines)
 - u does undo
 -2t0 copy 2 to zero 
 -2m0 move 2 to zero
@@ -20,9 +21,8 @@ To do
 -note that usually re and e would be regex matches but I don't want to do regex right now 
 -w for write ie save 
 
-Done 
--q to quit 
--make ed filename open a file. Add a prompt by default
+
+
 
 
 
